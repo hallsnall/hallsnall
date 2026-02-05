@@ -38,7 +38,7 @@ export default function EarlyAccessForm() {
         <input
           type="hidden"
           name="_redirect"
-          value="https://hallsnall.com/thanks"
+          value="https://hallsnall.vercel.app/thanks"
         />
 
         <input

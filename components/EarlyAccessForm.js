@@ -13,11 +13,16 @@ export default function EarlyAccessForm() {
         Get notified as we launch city by city. Be first to access new venues.
       </p>
 
-      <form
-        className="formRow"
-        method="POST"
-        action={site.formspreeAction}
-        onSubmit={() => setStatus("submitting")}
+        <form
+  className="formRow"
+  method="POST"
+  action={site.formspreeAction}
+  onSubmit={(e) => {
+    setStatus("submitting");
+    setTimeout(() => {
+      window.location.href = "/thanks";
+    }, 800);
+  }}
       >
         {/* Honeypot anti-spam */}
         <input

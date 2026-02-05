@@ -13,35 +13,35 @@ export default function EarlyAccessForm() {
         Get notified as we launch city by city. Be first to access new venues.
       </p>
 
-        <form
-  className="formRow"
-  method="POST"
-  action={site.formspreeAction}
-  onSubmit={async (e) => {
-  e.preventDefault();
-  setStatus("submitting");
+      <form
+        className="formRow"
+        method="POST"
+        action={site.formspreeAction}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setStatus("submitting");
 
-  try {
-    const form = e.currentTarget;
-    const data = new FormData(form);
+          try {
+            const form = e.currentTarget;
+            const data = new FormData(form);
 
-    const res = await fetch(site.formspreeAction, {
-      method: "POST",
-      body: data,
-      headers: { Accept: "application/json" },
-    });
+            const res = await fetch(site.formspreeAction, {
+              method: "POST",
+              body: data,
+              headers: { Accept: "application/json" },
+            });
 
-    if (res.ok) {
-      window.location.href = "/thanks";
-    } else {
-      setStatus("idle");
-      alert("Submission failed. Please try again.");
-    }
-  } catch (err) {
-    setStatus("idle");
-    alert("Network error. Please try again.");
-  }
-  }}
+            if (res.ok) {
+              window.location.href = "/thanks";
+            } else {
+              setStatus("idle");
+              alert("Submission failed. Please try again.");
+            }
+          } catch (err) {
+            setStatus("idle");
+            alert("Network error. Please try again.");
+          }
+        }}
       >
         {/* Honeypot anti-spam */}
         <input
@@ -57,12 +57,6 @@ export default function EarlyAccessForm() {
           type="hidden"
           name="_subject"
           value="New Early Access Signup - Halls’n’All"
-        />
-        {/* Redirect to your site after submit */}
-        <input
-          type="hidden"
-          name="_redirect"
-          value="https://hallsnall.vercel.app/thanks"
         />
 
         <input
@@ -85,16 +79,16 @@ export default function EarlyAccessForm() {
           <option value="" disabled>
             Event type…
           </option>
-          <option>Wedding</option>
-          <option>Birthday</option>
-          <option>Corporate</option>
-          <option>Baby Shower</option>
-          <option>Bridal Shower</option>
-          <option>Graduation</option>
-          <option>Church / Religious</option>
-          <option>Cultural Celebration</option>
-          <option>Party</option>
-          <option>Other</option>
+          <option value="Wedding">Wedding</option>
+          <option value="Birthday">Birthday</option>
+          <option value="Corporate">Corporate</option>
+          <option value="Baby Shower">Baby Shower</option>
+          <option value="Bridal Shower">Bridal Shower</option>
+          <option value="Graduation">Graduation</option>
+          <option value="Church / Religious">Church / Religious</option>
+          <option value="Cultural Celebration">Cultural Celebration</option>
+          <option value="Party">Party</option>
+          <option value="Other">Other</option>
         </select>
 
         <button

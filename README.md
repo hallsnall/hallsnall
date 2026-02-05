@@ -1,16 +1,20 @@
-## Hi there 👋
+# Halls’n’All (Unified Next.js Project)
 
-<!--
-**hallsnall/hallsnall** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+## Local run
+1) Install Node.js 18+
+2) In this folder:
+   - `npm install`
+   - `npm run dev`
+3) Open http://localhost:3000
 
-Here are some ideas to get you started:
+## Deploy (Vercel)
+1) Upload this folder to a GitHub repository
+2) In Vercel: New Project → Import GitHub repo → Deploy
+3) Add your domain `hallsnall.com`
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## Forms
+Early access and vendor apply are wired to Formspree:
+- https://formspree.io/f/maqdwnbo
+
+Redirect after submit:
+- https://hallsnall.com/thanks

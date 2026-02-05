@@ -1,115 +1,53 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import VenueCard from "@/components/VenueCard";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
-export default function VenueFiltersClient({ venues }) {
-  const [q, setQ] = useState("");
-  const [state, setState] = useState("All");
-  const [eventType, setEventType] = useState("All");
-  const [minCapacity, setMinCapacity] = useState("");
+export default function VenueFiltersClient({ cities, types }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const states = useMemo(() => {
-    const s = Array.from(new Set(venues.map((v) => v.state))).sort();
-    return ["All", ...s];
-  }, [venues]);
+  const [city, setCity] = useState(searchParams.get("city") || "");
+  const [type, setType] = useState(searchParams.get("type") || "");
 
-  const eventTypes = useMemo(() => {
-    const t = Array.from(new Set(venues.flatMap((v) => v.tags || []))).sort();
-    return ["All", ...t];
-  }, [venues]);
+  function applyFilters() {
+    const params = new URLSearchParams();
 
-  const filtered = useMemo(() => {
-    const query = q.trim().toLowerCase();
-    const cap = minCapacity ? Number(minCapacity) : null;
+    if (city) params.set("city", city);
+    if (type) params.set("type", type);
 
-    return venues.filter((v) => {
-      const matchesQuery =
-        !query ||
-        v.name.toLowerCase().includes(query) ||
-        v.city.toLowerCase().includes(query) ||
-        v.state.toLowerCase().includes(query) ||
-        (v.tags || []).some((t) => t.toLowerCase().includes(query));
+    router.push(`${pathname}?${params.toString()}`);
+  }
 
-      const matchesState = state === "All" || v.state === state;
-
-      const matchesEvent =
-        eventType === "All" || (v.tags || []).includes(eventType);
-
-      const matchesCap = cap === null || (v.capacity || 0) >= cap;
-
-      return matchesQuery && matchesState && matchesEvent && matchesCap;
-    });
-  }, [venues, q, state, eventType, minCapacity]);
+  function clearFilters() {
+    router.push(pathname);
+    setCity("");
+    setType("");
+  }
 
   return (
-    <>
-      <div className="card" style={{ marginBottom: 14 }}>
-        <div
-          style={{
-            display: "grid",
-            gap: 10,
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            alignItems: "center",
-          }}
-        >
-          <input
-            className="input"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search venue, city, tag…"
-          />
+    <div className="card" style={{ marginBottom: 20 }}>
+      <h3>Filter Venues</h3>
 
-          <select
-            className="input"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-          >
-            {states.map((s) => (
-              <option key={s} value={s}>
-                {s === "All" ? "All states" : s}
-              </option>
-            ))}
-          </select>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto auto", gap: 12 }}>
+        <select className="input" value={city} onChange={(e) => setCity(e.target.value)}>
+          <option value="">All Cities</option>
+          {cities.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
 
-          <select
-            className="input"
-            value={eventType}
-            onChange={(e) => setEventType(e.target.value)}
-          >
-            {eventTypes.map((t) => (
-              <option key={t} value={t}>
-                {t === "All" ? "All event types" : t}
-              </option>
-            ))}
-          </select>
+        <select className="input" value={type} onChange={(e) => setType(e.target.value)}>
+          <option value="">All Event Types</option>
+          {types.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
 
-          <input
-            className="input"
-            type="number"
-            min="0"
-            value={minCapacity}
-            onChange={(e) => setMinCapacity(e.target.value)}
-            placeholder="Min capacity (e.g., 150)"
-          />
-        </div>
-
-        <div className="fine">
-          Showing <b>{filtered.length}</b> of <b>{venues.length}</b> venues
-        </div>
+        <button className="btn" onClick={applyFilters}>Apply</button>
+        <button className="btn btnGhost" onClick={clearFilters}>Clear</button>
       </div>
-
-      <div
-        style={{
-          display: "grid",
-          gap: 14,
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-        }}
-      >
-        {filtered.map((v) => (
-          <VenueCard key={v.slug} v={v} />
-        ))}
-      </div>
-    </>
+    </div>
   );
 }

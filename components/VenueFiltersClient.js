@@ -1,53 +1,70 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import VenueCard from "./VenueCard";
 
-export default function VenueFiltersClient({ cities, types }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+const venues = [
+  { id: 1, name: "Grand Palace Hall", city: "Houston", type: "Wedding", capacity: 300 },
+  { id: 2, name: "Skyline Ballroom", city: "Dallas", type: "Birthday", capacity: 200 },
+  { id: 3, name: "Riverside Event Center", city: "Houston", type: "Corporate", capacity: 500 },
+  { id: 4, name: "Garden Pavilion", city: "Atlanta", type: "Wedding", capacity: 180 },
+  { id: 5, name: "Downtown Loft", city: "Chicago", type: "Baby Shower", capacity: 120 }
+];
 
-  const [city, setCity] = useState(searchParams.get("city") || "");
-  const [type, setType] = useState(searchParams.get("type") || "");
+export default function VenueFiltersClient() {
+  const [city, setCity] = useState("All");
+  const [eventType, setEventType] = useState("All");
 
-  function applyFilters() {
-    const params = new URLSearchParams();
-
-    if (city) params.set("city", city);
-    if (type) params.set("type", type);
-
-    router.push(`${pathname}?${params.toString()}`);
-  }
-
-  function clearFilters() {
-    router.push(pathname);
-    setCity("");
-    setType("");
-  }
+  const filteredVenues = venues.filter((venue) => {
+    return (
+      (city === "All" || venue.city === city) &&
+      (eventType === "All" || venue.type === eventType)
+    );
+  });
 
   return (
-    <div className="card" style={{ marginBottom: 20 }}>
-      <h3>Filter Venues</h3>
+    <div>
+      {/* FILTER BAR */}
+      <div className="card" style={{ marginBottom: "24px" }}>
+        <h3>Filter Venues</h3>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto auto", gap: 12 }}>
-        <select className="input" value={city} onChange={(e) => setCity(e.target.value)}>
-          <option value="">All Cities</option>
-          {cities.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <select value={city} onChange={(e) => setCity(e.target.value)}>
+            <option value="All">All Cities</option>
+            <option value="Houston">Houston</option>
+            <option value="Dallas">Dallas</option>
+            <option value="Atlanta">Atlanta</option>
+            <option value="Chicago">Chicago</option>
+          </select>
 
-        <select className="input" value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="">All Event Types</option>
-          {types.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+          <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+            <option value="All">All Event Types</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Corporate">Corporate</option>
+            <option value="Baby Shower">Baby Shower</option>
+          </select>
 
-        <button className="btn" onClick={applyFilters}>Apply</button>
-        <button className="btn btnGhost" onClick={clearFilters}>Clear</button>
+          <button
+            className="btn"
+            onClick={() => {
+              setCity("All");
+              setEventType("All");
+            }}
+          >
+            Clear
+          </button>
+        </div>
       </div>
+
+      {/* RESULTS */}
+      {filteredVenues.length === 0 && (
+        <p>No venues match your filters.</p>
+      )}
+
+      {filteredVenues.map((venue) => (
+        <VenueCard key={venue.id} venue={venue} />
+      ))}
     </div>
   );
 }

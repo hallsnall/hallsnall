@@ -1,25 +1,15 @@
-import Link from "next/link";
-
-export default function VenueCard({ v }) {
+export default function VenueCard({ venue }) {
   return (
-    <Link className="card cardLink" href={`/venues/${v.slug}`}>
-      <div className="cardTop">
-        <div className="pill">Capacity {v.capacity}</div>
-        <div className="pill">From ${v.priceFrom}</div>
-      </div>
+    <div className="card">
+      <h3>{venue.name}</h3>
 
-      <h3 className="h3">{v.name}</h3>
-      <div className="muted">
-        {v.city}, {v.state}
-      </div>
+      <p><strong>City:</strong> {venue.city}</p>
+      <p><strong>Event Type:</strong> {venue.type}</p>
+      <p><strong>Capacity:</strong> {venue.capacity}</p>
 
-      <div className="tagRow">
-        {(v.tags || []).slice(0, 3).map((t) => (
-          <span key={t} className="tag">
-            {t}
-          </span>
-        ))}
-      </div>
-    </Link>
+      <a className="btn" href="/apply">
+        Request Info
+      </a>
+    </div>
   );
 }

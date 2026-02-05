@@ -17,11 +17,30 @@ export default function EarlyAccessForm() {
   className="formRow"
   method="POST"
   action={site.formspreeAction}
-  onSubmit={(e) => {
-    setStatus("submitting");
-    setTimeout(() => {
+  onSubmit={async (e) => {
+  e.preventDefault();
+  setStatus("submitting");
+
+  try {
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    const res = await fetch(site.formspreeAction, {
+      method: "POST",
+      body: data,
+      headers: { Accept: "application/json" },
+    });
+
+    if (res.ok) {
       window.location.href = "/thanks";
-    }, 800);
+    } else {
+      setStatus("idle");
+      alert("Submission failed. Please try again.");
+    }
+  } catch (err) {
+    setStatus("idle");
+    alert("Network error. Please try again.");
+  }
   }}
       >
         {/* Honeypot anti-spam */}

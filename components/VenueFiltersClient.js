@@ -49,13 +49,8 @@ export default function VenueFiltersClient({ cities = [], types = [] }) {
           ))}
         </select>
 
-        <button className="btn" type="button" onClick={apply}>
-          Apply
-        </button>
-
-        <button className="btn btnGhost" type="button" onClick={clear}>
-          Clear
-        </button>
+        <button className="btn" type="button" onClick={apply}>Apply</button>
+        <button className="btn btnGhost" type="button" onClick={clear}>Clear</button>
       </div>
     </div>
   );
